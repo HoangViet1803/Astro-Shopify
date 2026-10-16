@@ -4,21 +4,25 @@
     class FeatureTabs extends HTMLElement {
         connectedCallback() {
             this.tablist = this.querySelector('[role="tablist"]');
-            this.tabs = Array.from(this.querySelectorAll('[role="tab"]'));
-            this.panels = Array.from(this.querySelectorAll('[role="tabpanel"]'));
-            if (!this.tablist || this.tabs.length === 0) return;
+            if(!this.tablist) return;
+            this.tabs = Array.from(this.tablist.querySelectorAll(':scope > [role="tab"]'));
+            this.panels = this.tabs
+                .map((tab) => this.querySelector(`#${CSS.escape(tab.getAttribute('aria-controls'))}`))
+                .filter(Boolean);
+            if (this.tabs.length === 0) return;
 
             this.controller = new AbortController();
             const { signal } = this.controller;
+
             this.tablist.addEventListener('click', (e) => this.onClick(e), {signal})
             this.tablist.addEventListener('keydown', (e) => this.onKeydown(e), {signal})
 
             // this.selectTab(tabs[0]);
             const savedId = activeTabBySection.get(this.dataset.sectionId);
-            const initialTab = this.tabs.find((tab) => {
-                tab.dataset.blockId = savedId || this.tabs[0];
-                this.selectTab(initialTab)
-            })
+            const initialTab = this.tabs.find((tab) => 
+                tab.dataset.blockId === savedId) || this.tabs[0];
+                this.selectTab(initialTab);
+            
             console.count('fct init');
 
         }
