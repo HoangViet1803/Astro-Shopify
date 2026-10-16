@@ -7,6 +7,11 @@
   assign products_limit = section.settings.products_per_collection
   assign first_block_id = ''
   assign tab_count = 0
+  assign hide_compare = true
+
+  if section.settings.show_compare_at_price
+    assign hide_compare = false
+  endif
 
   for block in section.blocks
     if block.settings.collection != blank or request.design_mode
@@ -15,7 +20,7 @@
         assign first_block_id = block.id
       endif
     endif
-  endfor 
+  endfor
 -%}
 
 {%- if tab_count > 0 -%}
@@ -86,19 +91,28 @@
           {% endunless %}
         >
           {%- if tab_collection == blank -%}
-            <ul class="grid product-grid contains-card contains-card--product grid--4-col-desktop grid--2-col-tablet-down" role="list">
+            <ul
+              class="grid product-grid contains-card contains-card--product grid--4-col-desktop grid--2-col-tablet-down"
+              role="list"
+            >
               {%- for i in (1..4) -%}
                 <li class="grid__item">
-                  {% render 'card-product', placeholder_image: 'product-apparel-1', lazy_load: false %}
+                  {% render 'card-product',
+                    placeholder_image: 'product-apparel-1',
+                    media_aspect_ratio: section.settings.image_ratio,
+                    show_vendor: section.settings.show_vendor,
+                    lazy_load: false
+                  %}
                 </li>
               {%- endfor -%}
             </ul>
           {%- elsif tab_collection.products.size == 0 -%}
-            <p class="fct__empty">
-              Collection “{{ tab_collection.title | escape }}” hiện chưa có sản phẩm.
-            </p>
+            <p class="fct__empty">Collection “{{ tab_collection.title | escape }}” hiện chưa có sản phẩm.</p>
           {%- else -%}
-            <ul class="grid product-grid contains-card contains-card--product grid--4-col-desktop grid--2-col-tablet-down" role="list">
+            <ul
+              class="grid product-grid contains-card contains-card--product grid--4-col-desktop grid--2-col-tablet-down"
+              role="list"
+            >
               {%- for product in tab_collection.products limit: products_limit -%}
                 {%- liquid
                   assign lazy = true
@@ -109,7 +123,9 @@
                 <li class="grid__item">
                   {% render 'card-product',
                     card_product: product,
-                    media_aspect_ratio: 'square',
+                    media_aspect_ratio: section.settings.image_ratio,
+                    show_vendor: section.settings.show_vendor,
+                    hide_compare_at_price: hide_compare,
                     lazy_load: lazy,
                     skip_styles: skip_card_styles,
                     section_id: card_section_id
@@ -151,6 +167,32 @@
       "max": 8,
       "step": 1,
       "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Product card"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "square", "label": "Square" },
+        { "value": "portrait", "label": "Portrait" }
+      ],
+      "default": "square"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_compare_at_price",
+      "label": "Show compare-at price",
+      "default": true
     }
   ],
   "blocks": [
@@ -174,8 +216,8 @@
   ],
   "presets": [
     {
-        "name": "Featured Collection Tabs",
-        "blocks": [{ "type": "tab" }, { "type": "tab" }, { "type": "tab" }]
+      "name": "Featured Collection Tabs",
+      "blocks": [{ "type": "tab" }, { "type": "tab" }, { "type": "tab" }]
     }
   ]
 }
