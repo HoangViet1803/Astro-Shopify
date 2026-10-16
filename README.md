@@ -1,99 +1,129 @@
-# Dawn
+# Featured Collection Tabs – Shopify Theme Developer Test
 
-[![Build status](https://github.com/shopify/dawn/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Shopify/dawn/actions/workflows/ci.yml?query=branch%3Amain)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?color=informational)](/.github/CONTRIBUTING.md)
+Section **Featured Collection Tabs** cho theme Dawn: hiển thị sản phẩm của nhiều collection theo dạng tab, merchant cấu hình hoàn toàn trong Theme Editor.
+---
 
-[Getting started](#getting-started) |
-[Staying up to date with Dawn changes](#staying-up-to-date-with-dawn-changes) |
-[Developer tools](#developer-tools) |
-[Contributing](#contributing) |
-[Code of conduct](#code-of-conduct) |
-[Theme Store submission](#theme-store-submission) |
-[License](#license)
+## Theme
 
-Dawn represents a HTML-first, JavaScript-only-as-needed approach to theme development. It's Shopify's first source available theme with performance, flexibility, and [Online Store 2.0 features](https://www.shopify.com/partners/blog/shopify-online-store) built-in and acts as a reference for building Shopify themes.
+- **Theme gốc:** Dawn `<phiên bản: 16.0.0>` – nguồn: https://github.com/Shopify/dawn
+- **Store:** `https://astro-vclt4n9y.myshopify.com/`
+- **Link preview:** `https://astro-vclt4n9y.myshopify.com/?preview_theme_id=193025048857`
 
-* **Web-native in its purest form:** Themes run on the [evergreen web](https://www.w3.org/2001/tag/doc/evergreen-web/). We leverage the latest web browsers to their fullest, while maintaining support for the older ones through progressive enhancement—not polyfills.
-* **Lean, fast, and reliable:** Functionality and design defaults to “no” until it meets this requirement. Code ships on quality. Themes must be built with purpose. They shouldn’t support each and every feature in Shopify.
-* **Server-rendered:** HTML must be rendered by Shopify servers using Liquid. Business logic and platform primitives such as translations and money formatting don’t belong on the client. Async and on-demand rendering of parts of the page is OK, but we do it sparingly as a progressive enhancement.
-* **Functional, not pixel-perfect:** The Web doesn’t require each page to be rendered pixel-perfect by each browser engine. Using semantic markup, progressive enhancement, and clever design, we ensure that themes remain functional regardless of the browser.
+## Cách chạy
 
-You can find a more detailed version of our theme code principles in the [contribution guide](https://github.com/Shopify/dawn/blob/main/.github/CONTRIBUTING.md#theme-code-principles).
-
-## Getting started
-We recommend using Dawn as a starting point for theme development. [Learn more on Shopify.dev](https://shopify.dev/themes/getting-started/create).
-
-> If you're building a theme for the Shopify Theme Store, then you can use Dawn as a starting point. However, the theme that you submit needs to be [substantively different from Dawn](https://shopify.dev/themes/store/requirements#uniqueness) so that it provides added value for merchants. Learn about the [ways that you can use Dawn](https://shopify.dev/themes/tools/dawn#ways-to-use-dawn).
-
-Please note that the main branch may include code for features not yet released. The "stable" version of Dawn is available in the theme store.
-
-## Staying up to date with Dawn changes
-
-Say you're building a new theme off Dawn but you still want to be able to pull in the latest changes, you can add a remote `upstream` pointing to this Dawn repository.
-
-1. Navigate to your local theme folder.
-2. Verify the list of remotes and validate that you have both an `origin` and `upstream`:
-```sh
-git remote -v
-```
-3. If you don't see an `upstream`, you can add one that points to Shopify's Dawn repository:
-```sh
-git remote add upstream https://github.com/Shopify/dawn.git
-```
-4. Pull in the latest Dawn changes into your repository:
-```sh
-git fetch upstream
-git pull upstream main
-```
-
-## Developer tools
-
-There are a number of really useful tools that the Shopify Themes team uses during development. Dawn is already set up to work with these tools.
-
-### Shopify CLI
-
-[Shopify CLI](https://github.com/Shopify/shopify-cli) helps you build Shopify themes faster and is used to automate and enhance your local development workflow. It comes bundled with a suite of commands for developing Shopify themes—everything from working with themes on a Shopify store (e.g. creating, publishing, deleting themes) or launching a development server for local theme development.
-
-You can follow this [quick start guide for theme developers](https://shopify.dev/docs/themes/tools/cli) to get started.
-
-### Theme Check
-
-We recommend using [Theme Check](https://github.com/shopify/theme-check) as a way to validate and lint your Shopify themes.
-
-We've added Theme Check to Dawn's [list of VS Code extensions](/.vscode/extensions.json) so if you're using Visual Studio Code as your code editor of choice, you'll be prompted to install the [Theme Check VS Code](https://marketplace.visualstudio.com/items?itemName=Shopify.theme-check-vscode) extension upon opening VS Code after you've forked and cloned Dawn.
-
-You can also run it from a terminal with the following Shopify CLI command:
-
+1. Cài Node.js LTS và Shopify CLI:
 ```bash
-shopify theme check
+   npm install -g @shopify/cli@latest
+```
+2. Clone repo, chuyển sang branch `feature/featured-collection-tabs`.
+3. Chạy theme ở chế độ phát triển:
+```bash
+   shopify theme dev --store astro-vclt4n9y.myshopify.com --theme-editor-sync
+```
+4. Mở Theme Editor → **Add section** → **Featured Collection Tabs**, chọn collection cho từng tab.
+5. Kiểm tra chất lượng:
+```bash
+   shopify theme check
 ```
 
-### Continuous Integration
+## Cấu trúc code và file đã sửa
 
-Dawn uses [GitHub Actions](https://github.com/features/actions) to maintain the quality of the theme. [This is a starting point](https://github.com/Shopify/dawn/blob/main/.github/workflows/ci.yml) and what we suggest to use in order to ensure you're building better themes. Feel free to build off of it!
+| File | Loại | Mô tả |
+|---|---|---|
+| `sections/featured-collection-tabs.liquid` | Mới | Section, schema, render tab và panel, xử lý trường hợp rỗng |
+| `assets/featured-collection-tabs.js` | Mới | Custom Element `<featured-tabs>`: chuyển tab, bàn phím, hỗ trợ Theme Editor |
+| `assets/section-featured-collection-tabs.css` | Mới | CSS có scope `.fct`, responsive, trạng thái hover/focus |
+| `snippets/card-product.liquid` | Sửa | Thêm tham số tùy chọn `hide_compare_at_price`, truyền xuống snippet giá |
+| `snippets/price.liquid` | Sửa | Ẩn giá gạch khi `hide_compare_at_price` là `true` |
+| `DEBUGGING.md` | Mới | Phân tích đoạn JavaScript lỗi của đề |
+| `QUALITY.md` | Mới | Test matrix, vấn đề thực tế, Theme Check, Lighthouse |
+| `docs/screenshots/` | Mới | Ảnh minh chứng |
 
-#### Shopify/lighthouse-ci-action
+### Cấu hình của section
 
-We love fast websites! Which is why we created [Shopify/lighthouse-ci-action](https://github.com/Shopify/lighthouse-ci-action). This runs a series of [Google Lighthouse](https://developers.google.com/web/tools/lighthouse) audits for the home, product and collections pages on a store to ensure code that gets added doesn't degrade storefront performance over time.
+| Setting | Loại | Mô tả |
+|---|---|---|
+| Heading | text | Tiêu đề section; dùng làm tên cho tablist (`aria-labelledby`) |
+| Products per collection | range 4–8 | Số sản phẩm mỗi tab |
+| Image ratio | select | Square / Portrait, truyền vào `media_aspect_ratio` của card |
+| Show vendor | checkbox | Hiện tên vendor trên card |
+| Show compare-at price | checkbox | Bật/tắt giá gạch khi sản phẩm giảm giá |
 
-#### Shopify/theme-check-action
+Mỗi tab là một block **Collection tab** (tối đa 4) gồm: Collection và Custom tab label (để trống thì dùng tên collection).
 
-Dawn runs [Theme Check](#Theme-Check) on every commit via [Shopify/theme-check-action](https://github.com/Shopify/theme-check-action).
+---
 
-## Contributing
+## Phần A – Liquid & Architecture
 
-Want to make commerce better for everyone by contributing to Dawn? We'd love your help! Please read our [contributing guide](https://github.com/Shopify/dawn/blob/main/.github/CONTRIBUTING.md) to learn about our development process, how to propose bug fixes and improvements, and how to build for Dawn.
+### Kết quả
 
-## Code of conduct
+- 3 setting mới: **Image ratio**, **Show vendor**, **Show compare-at price**, nằm trong nhóm "Product card" của sidebar.
+- Xử lý đủ trường hợp biên:
+  - Collection rỗng: hiện dòng thông báo, không lỗi Liquid.
+  - Block chưa chọn collection: trong editor hiện tab placeholder; ngoài storefront tab bị ẩn hoàn toàn.
+  - Không còn tab hợp lệ: storefront không in gì, editor hiện dòng hướng dẫn.
 
-All developers who wish to contribute through code or issues, please first read our [Code of Conduct](https://github.com/Shopify/dawn/blob/main/.github/CODE_OF_CONDUCT.md).
+### Cách kiểm thử
 
-## Theme Store submission
+- Test matrix dòng 1, 2, 5, 6, 12 trong `QUALITY.md`.
+- Tắt Show compare-at price trong section, rồi mở `/collections/sale` và section Featured collection gốc của Dawn: giá gạch ở các nơi đó vẫn hiện như cũ, chứng minh không ảnh hưởng tính năng khác.
 
-The [Shopify Theme Store](https://themes.shopify.com/) is the place where Shopify merchants find the themes that they'll use to showcase and support their business. As a theme partner, you can create themes for the Shopify Theme Store and reach an international audience of an ever-growing number of entrepreneurs.
+## Phần B – JavaScript
 
-Ensure that you follow the list of [theme store requirements](https://shopify.dev/themes/store/requirements) if you're interested in becoming a [Shopify Theme Partner](https://themes.shopify.com/services/themes/guidelines) and building themes for the Shopify platform.
+### Kết quả
 
-## License
+- Bấm tab đổi panel ngay, không tải lại trang; chỉ một panel hiển thị, `aria-selected` luôn khớp với panel đang mở.
+- Bàn phím theo W3C tabs pattern: ←/→ (quay vòng), Home/End, Enter/Space; roving tabindex nên phím Tab chỉ dừng một lần trong hàng tab.
+- Nhiều section cùng loại trên một trang hoạt động độc lập.
+- Theme Editor:
+  - Đổi setting (section render lại): vẫn giữ tab đang chọn và vẫn bấm được.
+  - Xóa block đang được chọn: quay về tab hợp lệ đầu tiên.
+  - Bấm block ở sidebar: preview mở đúng tab đó.
 
-Copyright (c) 2021-present Shopify Inc. See [LICENSE](/LICENSE.md) for further details.
+### Cơ chế init và cleanup
+
+- Section là Custom Element `<featured-tabs>`. Trình duyệt tự gọi `connectedCallback()` khi phần tử được gắn vào trang (tải trang, thêm section, editor render lại) và `disconnectedCallback()` khi phần tử bị gỡ.
+- Listener `click` và `keydown` gắn một lần trên tablist (event delegation), kèm `signal` của `AbortController`. `disconnectedCallback()` gọi `abort()` để gỡ toàn bộ listener cùng lúc.
+- Mọi truy vấn DOM chỉ tìm trong `this`, nên các section không ảnh hưởng nhau.
+- File được bọc trong hàm tự chạy và có guard `customElements.get('featured-tabs')`, nên tải nhiều lần cũng chỉ đăng ký một lần. Listener `shopify:block:select` trên `document` nằm sau guard nên chỉ được gắn đúng một lần.
+- Tab đang chọn được lưu trong một `Map` (khóa `section.id`, giá trị `block.id`) nằm ngoài class. Map còn nguyên qua các lần editor render lại, nhưng mất khi tải lại trang, nên khách luôn thấy tab đầu tiên. Vì lý do này tôi không dùng `sessionStorage`.
+- Chọn tab ngay khi di chuyển bằng phím mũi tên (automatic activation), vì nội dung panel đã có sẵn trong trang, đổi ngay không tốn thêm request.
+
+Phân tích đoạn JavaScript lỗi của đề: xem [DEBUGGING.md](DEBUGGING.md).
+
+---
+
+## Phần C – CSS & UI
+
+### Kết quả
+
+- Ảnh ở 4 kích thước: `docs/screenshots/390px.png`, `docs/screenshots/768px.png`, `docs/screenshots/1200px.png`, `docs/screenshots/1440.png`.
+- Grid 2 cột trên mobile/tablet, 4 cột trên desktop; trang không tràn ngang.
+- Tab có hover, trạng thái đang chọn rõ ràng, focus ring nhìn thấy đủ; card có hiệu ứng hover nhẹ.
+- Tên sản phẩm dài tối đa 2 dòng; giá cũ và giá mới không bị ngắt giữa con số.
+
+### 3 quyết định thiết kế
+
+1. **Hàng tab cuộn ngang thay vì xuống dòng.** Hàng tab luôn một dòng nên không đẩy grid xuống; chỉ tablist cuộn nên cả trang không tràn. Label dài bị cắt "…", tên đầy đủ vẫn có trong `title` và được trình đọc màn hình đọc đủ. `scroll-snap` giúp vuốt dừng đúng đầu mỗi tab.
+2. **Dùng lại grid, card và biến màu của Dawn.** Section đồng bộ phong cách với theme, tự đổi theo color scheme (`--color-foreground`), ít CSS phải bảo trì. Ở 768px giữ 2 cột theo Dawn: số sản phẩm là 4–8, nên 2 cột luôn chia hết, còn 3 cột sẽ để lại card lẻ ở hàng cuối.
+3. **CSS có scope bằng tiền tố `.fct` và focus ring vẽ vào trong.** Mọi selector bắt đầu bằng `.fct` nên không rò rỉ sang section khác. Focus ring dùng `outline-offset` âm vì tablist có `overflow-x: auto`, outline mặc định của Dawn sẽ bị cắt mất.
+
+---
+
+## Phần D – Quality
+
+Chi tiết trong [QUALITY.md](QUALITY.md). Tóm tắt:
+
+- **Test matrix:** 12 trường hợp gồm storefront, editor, bàn phím, empty states, multi-instance.
+- **Theme Check:** 0 error. 3 warning `BlockIdUsage` trong file đã tạp để phục vụ cho bài test được giữ lại có giải thích; 9 warning còn lại thuộc file gốc Dawn.
+- **Lighthouse (Mobile):** Performance 71, Accessibility 97, CLS 0, TBT 40 ms.
+
+---
+
+## Công cụ AI đã dùng
+
+- **Công cụ:** `Claude`
+- **Phạm vi sử dụng:** 
+    - Phân thích yêu cầu
+    - Tổng hợp tài liệu
+    - Giải đáp thắc mắc, đề xuất phương án xử lý vấn đề
