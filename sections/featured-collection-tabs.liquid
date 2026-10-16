@@ -1,20 +1,134 @@
-<div class="fct page-width">
-  {%- if section.settings.heading != blank -%}
-    <h2 class="fct__heading">{{ section.settings.heading | escape }}</h2>
-  {%- endif -%}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'section-featured-collection-tabs.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'featured-collection-tabs.js' | asset_url }}" defer="defer"></script>
 
-  <ul class="fct__debug-list">
-    {%- for block in section.blocks -%}
-      {%- liquid
-        assign tab_collection = block.settings.collection
-        assign tab_label = block.settings.label | default: tab_collection.title | default: 'Chưa chọn collection'
-      -%}
-      <li {{ block.shopify_attributes }}>
-        {{ tab_label | escape }}
-      </li>
-    {%- endfor -%}
-  </ul>
-</div>
+{%- liquid
+  assign products_limit = section.settings.products_per_collection
+  assign first_block_id = ''
+  assign tab_count = 0
+
+  for block in section.blocks
+    if block.settings.collection != blank or request.design_mode
+      assign tab_count = tab_count | plus: 1
+      if first_block_id == ''
+        assign first_block_id = block.id
+      endif
+    endif
+  endfor 
+-%}
+
+{%- if tab_count > 0 -%}
+  <featured-tabs class="fct" data-section-id="{{ section.id }}">
+    <div class="page-width">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="fct__heading h2" id="FctHeading-{{ section.id }}">
+          {{- section.settings.heading | escape -}}
+        </h2>
+      {%- endif -%}
+
+      <div
+        class="fct__tablist"
+        role="tablist"
+        {% if section.settings.heading != blank %}
+          aria-labelledby="FctHeading-{{ section.id }}"
+        {% endif %}
+      >
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign tab_collection = block.settings.collection
+            if tab_collection == blank
+              unless request.design_mode
+                continue
+              endunless
+            endif
+            assign tab_label = block.settings.label | default: tab_collection.title | default: 'Chưa chọn collection'
+            assign is_active = false
+            if block.id == first_block_id
+              assign is_active = true
+            endif
+          -%}
+          <button
+            type="button"
+            class="fct__tab"
+            role="tab"
+            id="FctTab-{{ block.id }}"
+            aria-controls="FctPanel-{{ block.id }}"
+            aria-selected="{{ is_active }}"
+            tabindex="{% if is_active %}0{% else %}-1{% endif %}"
+            title="{{ tab_label | escape }}"
+            data-block-id="{{ block.id }}"
+            {{ block.shopify_attributes }}
+          >
+            <span class="fct__tab-text">{{ tab_label | escape }}</span>
+          </button>
+        {%- endfor -%}
+      </div>
+
+      {%- assign skip_card_styles = false -%}
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign tab_collection = block.settings.collection
+          if tab_collection == blank
+            unless request.design_mode
+              continue
+            endunless
+          endif
+          assign card_section_id = section.id | append: '-' | append: block.id
+        -%}
+        <div
+          class="fct__panel"
+          role="tabpanel"
+          id="FctPanel-{{ block.id }}"
+          aria-labelledby="FctTab-{{ block.id }}"
+          {% unless block.id == first_block_id %}
+            hidden
+          {% endunless %}
+        >
+          {%- if tab_collection == blank -%}
+            <ul class="grid product-grid contains-card contains-card--product grid--4-col-desktop grid--2-col-tablet-down" role="list">
+              {%- for i in (1..4) -%}
+                <li class="grid__item">
+                  {% render 'card-product', placeholder_image: 'product-apparel-1', lazy_load: false %}
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- elsif tab_collection.products.size == 0 -%}
+            <p class="fct__empty">
+              Collection “{{ tab_collection.title | escape }}” hiện chưa có sản phẩm.
+            </p>
+          {%- else -%}
+            <ul class="grid product-grid contains-card contains-card--product grid--4-col-desktop grid--2-col-tablet-down" role="list">
+              {%- for product in tab_collection.products limit: products_limit -%}
+                {%- liquid
+                  assign lazy = true
+                  if block.id == first_block_id and forloop.index <= 4
+                    assign lazy = false
+                  endif
+                -%}
+                <li class="grid__item">
+                  {% render 'card-product',
+                    card_product: product,
+                    media_aspect_ratio: 'square',
+                    lazy_load: lazy,
+                    skip_styles: skip_card_styles,
+                    section_id: card_section_id
+                  %}
+                </li>
+                {%- assign skip_card_styles = true -%}
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </featured-tabs>
+{%- elsif request.design_mode -%}
+  <div class="fct page-width">
+    <p class="fct__empty">Thêm block “Collection tab” và chọn collection để hiển thị sản phẩm.</p>
+  </div>
+{%- endif -%}
+
 {% schema %}
 {
   "name": "Featured Collection Tabs",
