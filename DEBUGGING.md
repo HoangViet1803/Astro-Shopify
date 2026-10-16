@@ -48,28 +48,36 @@ Shopify cung cấp các event riêng cho trường hợp này: shopify:section:l
 
 Code trong bài: [assets/featured-collection-tabs.js](assets/featured-collection-tabs.js).
 
-### Các bước kiểm thử hồi quy ###
+### Các bước kiểm thử hồi quy
+
 (thao tác -> kết quả mong đợi)
+
 ## Vấn đề 1: Nhiều section trên cùng trang
-1.1 Click tab thứ 2 ở section đầu tiên -> Section 1 chuyển sang tab 2
-1.2	Click tab thứ 3 ở section thứ hai và thứ ba	-> Mỗi section chuyển đúng tab
-1.3	Sau bước 1.2, nhìn lại section 1 -> Section 1 vẫn ở tab 2, không bị ảnh hưởng
-1.4	Lặp lại 1.1–1.3 ở storefront (Preview, ngoài Theme Editor) -> Kết quả giống hệt
+
+- 1.1 Click tab thứ 2 ở section đầu tiên -> Section 1 chuyển sang tab 2
+- 1.2 Click tab thứ 3 ở section thứ hai và thứ ba -> Mỗi section chuyển đúng tab
+- 1.3 Sau bước 1.2, nhìn lại section 1 -> Section 1 vẫn ở tab 2, không bị ảnh hưởng
+- 1.4 Lặp lại 1.1–1.3 ở storefront (Preview, ngoài Theme Editor) -> Kết quả giống hệt
 
 ## Vấn đề 2: Theme Editor render lại section
-2.1	Đổi một setting của section (heading, màu, số sản phẩm…) -> Tab vẫn hoạt động
-2.2	Thêm block mới -> Tab mới click được, mở đúng panel
-2.3	Xoá một block -> Các tab còn lại vẫn hoạt động
-2.4	Kéo thả sắp xếp lại thứ tự block -> Mỗi tab mở đúng panel của nó (không lệch)
-2.5	Thêm một section Featured Tabs mới -> Section mới hoạt động ngay, section cũ không bị ảnh hưởng
-2.6	Kéo section lên/xuống vài lần (≥3 lần) -> Tab vẫn hoạt động; click 1 lần chỉ chuyển tab 1 lần (không giật/nhảy)
-2.7	Xoá một section rồi Undo (Ctrl/Cmd+Z) -> Section khôi phục và hoạt động bình thường
-2.8	Trong suốt 2.1–2.7, xem Console	-> Không có lỗi, đặc biệt không có lỗi kiểu 'featured-tabs' has already been defined
+
+- 2.1 Đổi một setting của section (heading, màu, số sản phẩm…) -> Tab vẫn hoạt động
+- 2.2 Thêm block mới -> Tab mới click được, mở đúng panel
+- 2.3 Xoá một block -> Các tab còn lại vẫn hoạt động
+- 2.4 Kéo thả sắp xếp lại thứ tự block -> Mỗi tab mở đúng panel của nó (không lệch)
+- 2.5 Thêm một section Featured Tabs mới -> Section mới hoạt động ngay, section cũ không bị ảnh hưởng
+- 2.6 Kéo section lên/xuống vài lần (≥3 lần) -> Tab vẫn hoạt động; click 1 lần chỉ chuyển tab 1 lần (không giật/nhảy)
+- 2.7 Xoá một section rồi Undo (Ctrl/Cmd+Z) -> Section khôi phục và hoạt động bình thường
+- 2.8 Trong suốt 2.1–2.7, xem Console -> Không có lỗi, đặc biệt không có lỗi kiểu 'featured-tabs' has already been defined
+
 # Giữ trạng thái khi render lại
-2.9	Chọn tab 3 ở section A, tab 2 ở section B, rồi đổi một setting của section A -> Section A vẫn mở tab 3 (không quay về tab 1); section B vẫn ở tab 2
-2.10	Đang mở tab 3, xoá block của tab 3 -> Section mở về tab mặc định, không bị trống panel
+
+- 2.9 Chọn tab 3 ở section A, tab 2 ở section B, rồi đổi một setting của section A -> Section A vẫn mở tab 3 (không quay về tab 1); section B vẫn ở tab 2
+- 2.10 Đang mở tab 3, xoá block của tab 3 -> Section mở về tab mặc định, không bị trống panel
+
 # Chọn block ở sidebar
-2.11	Ở sidebar, click vào block thứ 3 của section A -> Preview của section A tự chuyển sang tab 3; các section khác không đổi
-2.12	Thêm block mới rồi click chọn block đó ở sidebar -> Mở đúng tab mới
+
+- 2.11 Ở sidebar, click vào block thứ 3 của section A -> Preview của section A tự chuyển sang tab 3; các section khác không đổi
+- 2.12 Thêm block mới rồi click chọn block đó ở sidebar -> Mở đúng tab mới
 
 ## Vấn đề 3: Selector đúng phạm vi
