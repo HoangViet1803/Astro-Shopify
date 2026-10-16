@@ -1,0 +1,111 @@
+.fct {
+  display: block;
+  padding-block: 3.6rem;
+}
+
+@media screen and (min-width: 750px) {
+  .fct {
+    padding-block: 5rem;
+  }
+}
+
+.fct__heading {
+  margin: 0 0 1.6rem;
+}
+
+/* Hàng tab: chỉ hàng này cuộn ngang, cả trang không bị tràn */
+.fct__tablist {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 2.4rem;
+  padding: 0.4rem 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.15);
+}
+
+.fct__tab {
+  flex: 0 0 auto;
+  max-width: min(24rem, 70vw);
+  padding: 1rem 1.6rem;
+  font: inherit;
+  font-size: 1.5rem;
+  letter-spacing: 0.04rem;
+  color: rgba(var(--color-foreground), 0.7);
+  background: none;
+  border: 0;
+  border-bottom: 0.2rem solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+
+}
+
+.fct__tab-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fct__tab:hover {
+  color: rgb(var(--color-foreground));
+  background-color: rgba(var(--color-foreground), 0.04);
+}
+
+.fct__tab[aria-selected='true'] {
+  color: rgb(var(--color-foreground));
+  border-bottom-color: rgb(var(--color-foreground));
+}
+
+.fct__tab:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+  outline-offset: -0.2rem;
+  box-shadow: none;
+}
+
+.fct__panel[hidden] {
+  display: none;
+}
+
+/* Card */
+.fct .card__heading {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.fct .card__media img {
+  transition: transform 0.4s ease;
+}
+
+.fct .card-wrapper:hover .card__media img {
+  transform: scale(1.03);
+}
+
+/* Price */
+.fct .price .price-item {
+  white-space: nowrap;
+}
+
+.fct .price--on-sale .price__sale {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.8rem;
+}
+
+/* ---------- Empty state ---------- */
+.fct__empty {
+  margin: 0;
+  padding: 3.2rem 1.6rem;
+  text-align: center;
+  color: rgba(var(--color-foreground), 0.75);
+  border: 0.1rem dashed rgba(var(--color-foreground), 0.2);
+}
