@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "general": {
     "password_page": {
@@ -375,6 +384,20 @@
       "min_error": "Mặt hàng này có tối thiểu {{ min }}",
       "max_error": "Mặt hàng này có tối đa {{ max }}",
       "step_error": "Bạn chỉ có thể thêm mặt hàng này theo đơn vị giao dịch {{ step }}"
+    },
+    "custom_slider": {
+      "carousel_label": "Trình chiếu nổi bật",
+      "carousel_roledescription": "băng chuyền",
+      "slide_roledescription": "trang chiếu",
+      "slide_label": "Slide {{ current }} trên {{ total }}",
+      "previous": "Slide trước",
+      "next": "Slide tiếp theo",
+      "pause": "Tạm dừng",
+      "play": "Phát",
+      "go_to_slide": "Chuyển đến slide {{ number }}",
+      "counter": "{{ current }} / {{ total }}",
+      "slide_link": "Xem slide {{ number }}",
+      "new_tab": "Mở trong tab mới"
     }
   },
   "localization": {

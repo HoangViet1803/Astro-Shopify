@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "settings_schema": {
     "global": {
@@ -3396,6 +3405,134 @@
           "label": "Open by default"
         }
       }
+    },
+    "custom_slider": {
+      "name": "Custom slider",
+      "headers": {
+        "layout": "Layout", "colors": "Colors", "typography": "Typography",
+        "content_box": "Content box", "buttons": "Buttons", "motion": "Motion",
+        "autoplay": "Autoplay", "navigation": "Navigation",
+        "image": "Image", "content": "Content", "button_1": "Button 1", "button_2": "Button 2",
+        "slide_link": "Slide link", "position": "Position", "slide_colors": "Slide colors"
+      },
+      "options": {
+        "full_width": "Full width", "page_width": "Page width",
+        "adapt": "Adapt to first image", "small": "Small", "medium": "Medium", "large": "Large",
+        "full_screen": "Full screen", "custom": "Custom",
+        "cover": "Cover", "contain": "Contain", "h1": "H1", "h2": "H2",
+        "color_change": "Change color", "invert": "Invert colors", "underline": "Underline",
+        "slide": "Slide", "fade": "Fade", "none": "None", "fade_up": "Fade up",
+        "ease": "Ease", "ease_in_out": "Ease in-out", "linear": "Linear", "smooth": "Smooth",
+        "dots": "Dots", "counter": "Counter", "hidden": "Hidden",
+        "sides": "Sides, centered", "dot": "Dot", "line": "Line", "progress": "Progress bar",
+        "outside": "Below the image", "solid": "Solid", "outline": "Outline", "link": "Link",
+        "top_left": "Top left", "top_center": "Top center", "top_right": "Top right",
+        "middle_left": "Middle left", "middle_center": "Middle center", "middle_right": "Middle right",
+        "bottom_left": "Bottom left", "bottom_center": "Bottom center", "bottom_right": "Bottom right",
+        "left": "Left", "center": "Center", "right": "Right",
+        "top": "Top", "middle": "Middle", "bottom": "Bottom"
+      },
+      "settings": {
+        "width": { "label": "Width" },
+        "height_desktop": { "label": "Desktop height" },
+        "height_desktop_custom": { "label": "Custom desktop height", "info": "Used when desktop height is Custom" },
+        "height_mobile": { "label": "Mobile height" },
+        "height_mobile_custom": { "label": "Custom mobile height", "info": "Used when mobile height is Custom" },
+        "image_fit": { "label": "Image fit" },
+        "slider_radius": { "label": "Slider corner radius" },
+        "side_margin": { "label": "Side margin" },
+        "padding_top_desktop": { "label": "Top padding (desktop)" },
+        "padding_bottom_desktop": { "label": "Bottom padding (desktop)" },
+        "padding_top_mobile": { "label": "Top padding (mobile)" },
+        "padding_bottom_mobile": { "label": "Bottom padding (mobile)" },
+        "color_scheme": { "label": "Color scheme", "info": "Default colors for every slide" },
+        "use_heading_font": { "label": "Use a custom heading font" },
+        "heading_font": { "label": "Heading font" },
+        "use_body_font": { "label": "Use a custom body font" },
+        "body_font": { "label": "Body font" },
+        "heading_size_desktop": { "label": "Heading size (desktop)" },
+        "heading_size_mobile": { "label": "Heading size (mobile)" },
+        "subheading_size_desktop": { "label": "Subheading size (desktop)" },
+        "subheading_size_mobile": { "label": "Subheading size (mobile)" },
+        "text_size_desktop": { "label": "Description size (desktop)" },
+        "text_size_mobile": { "label": "Description size (mobile)" },
+        "heading_weight": { "label": "Heading weight" },
+        "heading_letter_spacing": { "label": "Heading letter spacing" },
+        "heading_line_height": { "label": "Heading line height" },
+        "subheading_uppercase": { "label": "Uppercase subheading" },
+        "first_heading_tag": { "label": "First slide heading tag", "info": "Other slides always use H2. Choose H1 only if the page has no other H1." },
+        "content_gap": { "label": "Spacing between content elements" },
+        "content_max_width": { "label": "Max width (desktop)" },
+        "content_padding": { "label": "Inner padding" },
+        "content_radius": { "label": "Corner radius" },
+        "button_radius": { "label": "Corner radius" },
+        "button_border_width": { "label": "Border thickness" },
+        "button_padding_x": { "label": "Horizontal padding" },
+        "button_padding_y": { "label": "Vertical padding" },
+        "button_font_size": { "label": "Font size" },
+        "button_hover": { "label": "Hover style" },
+        "transition": { "label": "Transition effect" },
+        "transition_duration": { "label": "Transition duration" },
+        "transition_easing": { "label": "Easing" },
+        "content_animation": { "label": "Content animation" },
+        "content_animation_duration": { "label": "Content animation duration" },
+        "content_animation_delay": { "label": "Delay between content elements" },
+        "autoplay": { "label": "Enable autoplay" },
+        "autoplay_speed": { "label": "Change slides every" },
+        "pause_on_hover": { "label": "Pause on hover" },
+        "loop": { "label": "Infinite loop" },
+        "show_arrows": { "label": "Show arrows" },
+        "show_dots": { "label": "Show dots" },
+        "show_counter": { "label": "Show counter" },
+        "mobile_nav": { "label": "Mobile navigation" },
+        "arrow_color": { "label": "Arrow color" },
+        "arrow_bg": { "label": "Arrow background" },
+        "arrow_size": { "label": "Arrow size" },
+        "arrow_radius": { "label": "Arrow corner radius" },
+        "arrow_position": { "label": "Arrow position" },
+        "arrow_hide_mobile": { "label": "Hide arrows on mobile" },
+        "dot_style": { "label": "Dot style" },
+        "dot_color": { "label": "Dot color" },
+        "dot_active_color": { "label": "Active dot color" },
+        "dot_size": { "label": "Dot size" },
+        "nav_position": { "label": "Dots and counter position" },
+        "swipe_threshold": { "label": "Swipe threshold", "info": "Minimum drag distance to change slide" }
+      },
+      "blocks": {
+        "slide": {
+          "name": "Slide",
+          "settings": {
+            "image": { "label": "Desktop image" },
+            "image_mobile": { "label": "Mobile image", "info": "Optional. Uses the desktop image when empty." },
+            "overlay_color": { "label": "Overlay color" },
+            "overlay_opacity": { "label": "Overlay opacity" },
+            "subheading": { "label": "Subheading" },
+            "heading": { "label": "Heading" },
+            "text": { "label": "Description" },
+            "button_label": { "label": "Label" },
+            "button_link": { "label": "Link" },
+            "button_style": { "label": "Style" },
+            "button_new_tab": { "label": "Open in a new tab" },
+            "slide_link": { "label": "Link for the whole slide", "info": "Only used when the slide has no buttons" },
+            "position_desktop": { "label": "Content position (desktop)" },
+            "text_align_desktop": { "label": "Text alignment (desktop)" },
+            "position_mobile": { "label": "Content position (mobile)" },
+            "text_align_mobile": { "label": "Text alignment (mobile)" },
+            "use_custom_colors": { "label": "Use custom colors", "info": "When off, the section color scheme is used" },
+            "heading_color": { "label": "Heading" },
+            "subheading_color": { "label": "Subheading" },
+            "text_color": { "label": "Description" },
+            "button_bg": { "label": "Button background" },
+            "button_text": { "label": "Button text" },
+            "button_border": { "label": "Button border" },
+            "button_hover": { "label": "Button hover" },
+            "show_content_bg": { "label": "Show background behind content" },
+            "content_bg": { "label": "Content background" },
+            "content_bg_opacity": { "label": "Content background opacity" }
+          }
+        }
+      },
+      "presets": { "name": "Custom slider" }
     }
   }
 }
