@@ -47,7 +47,7 @@
 .cs-slider.is-ready .cs-track {
   overflow: visible;
   scroll-snap-type: none;
-  touch-action: pan-y;      
+  touch-action: pan-y pinch-zoom;
   transform: translate3d(calc(var(--cs-index, 0) * -100% + var(--cs-drag, 0px)), 0, 0);
   transition: transform var(--cs-duration, 600ms) var(--cs-easing, ease);
 }
@@ -339,6 +339,20 @@
 .cs-play[data-state="paused"] .cs-play__icon--pause {
   display: none;
 }
+@media (hover: hover) {
+  .cs-slider .cs-play:not(:focus-visible) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+}
 .cs-dots {
   display: flex;
   align-items: center;
@@ -453,5 +467,44 @@
   }
   .cs-slider[data-mobile-nav] .cs-counter {
     display: block;
+  }
+}
+.cs-slider.is-ready[data-anim] .cs-content > * {
+  opacity: 0;
+  transition:
+    opacity var(--cs-anim-duration, 700ms) var(--cs-anim-easing, ease),
+    transform var(--cs-anim-duration, 700ms) var(--cs-anim-easing, ease);
+}
+.cs-slider.is-ready[data-anim="fade-up"] .cs-content > * {
+  transform: translateY(var(--cs-anim-offset, 1.5rem));
+}
+.cs-slider.is-ready[data-anim] .cs-slide.is-active .cs-content > * {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--cs-anim-delay, 150ms) * var(--i, 0));
+}
+.cs-slider[data-dot-style="progress"][data-playing="true"] .cs-dot[aria-current="true"] .cs-dot__fill {
+  animation: cs-progress var(--cs-autoplay-speed, 5000ms) linear forwards;
+}
+.cs-slider[data-dot-style="progress"][data-suspended="true"] .cs-dot__fill {
+  animation-play-state: paused;
+}
+@keyframes cs-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs-slider .cs-track,
+  .cs-slider .cs-slide,
+  .cs-slider .cs-content > *,
+  .cs-slider .cs-btn::after {
+    transition: none !important;
+  }
+  .cs-slider .cs-dot__fill {
+    animation: none !important;
+  }
+   .cs-slider.is-ready[data-anim] .cs-content > * {
+    opacity: 1;
+    transform: none;
   }
 }

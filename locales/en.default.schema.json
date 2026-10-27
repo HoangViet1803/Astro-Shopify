@@ -3482,6 +3482,7 @@
         "autoplay_speed": { "label": "Change slides every" },
         "pause_on_hover": { "label": "Pause on hover" },
         "loop": { "label": "Infinite loop" },
+        "stop_on_interaction": { "label": "Stop autoplay after visitor navigates", "info": "When on, autoplay stops once a visitor uses the arrows, dots, keyboard or swipe. When off, the timer restarts after each manual change." },
         "show_arrows": { "label": "Show arrows" },
         "show_dots": { "label": "Show dots" },
         "show_counter": { "label": "Show counter" },
