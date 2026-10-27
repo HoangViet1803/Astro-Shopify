@@ -1,8 +1,8 @@
 {{ 'section-custom-slider.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'section-custom-slider.js' | asset_url }}" defer="defer"></script>
 {%- liquid
   assign s = section.settings
   assign total = section.blocks.size
+  assign slide_role = 'sections.custom_slider.slide_roledescription' | t | escape
   # Danh sách width cho srcset – dùng chung cho image_tag và <source>
   assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000'
   assign widths_arr = widths | split: ', '
@@ -40,6 +40,9 @@
     endif
   endif
 -%}
+{%- if total > 1 -%}
+  <script src="{{ 'section-custom-slider.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
 {%- if s.use_heading_font or s.use_body_font -%}
   <style>
     {%- if s.use_heading_font -%}{{ heading_font | font_face: font_display: 'swap' }}{%- endif -%}
@@ -73,6 +76,8 @@
   --cs-btn-radius: {{ s.button_radius }}px; --cs-btn-border-w: {{ s.button_border_width }}px;
   --cs-btn-px: {{ s.button_padding_x }}px; --cs-btn-py: {{ s.button_padding_y }}px;
   --cs-btn-size: {{ s.button_font_size }}px;
+  --cs-duration: {{ s.transition_duration }}ms; --cs-easing: {{ s.transition_easing }};
+  --cs-autoplay-speed: {{ s.autoplay_speed | times: 1000 }}ms;
   --cs-anim-duration: {{ s.content_animation_duration }}ms;
   --cs-anim-delay: {{ s.content_animation_delay }}ms;
   --cs-arrow-color: {{ s.arrow_color }}; --cs-arrow-bg: {{ s.arrow_bg }};
@@ -83,7 +88,7 @@
 <div class="cs-section color-{{ s.color_scheme }} gradient" style="{{ section_style | strip_newlines | strip }}" data-cs-hover="{{ s.button_hover }}">
   <div class="cs-container{% if s.width == 'page' %} cs-container--page{% endif %}">
     {%- if total > 0 -%}
-      <custom-slider class="cs-slider" role="region" aria-roledescription="{{ 'sections.custom_slider.carousel_roledescription' | t | escape }}" aria-label="{{ 'sections.custom_slider.carousel_label' | t | escape }}" data-transition="{{ s.transition }}" data-duration="{{ s.transition_duration }}" data-easing="{{ s.transition_easing }}" data-autoplay="{{ s.autoplay }}" data-speed="{{ s.autoplay_speed }}" data-pause-hover="{{ s.pause_on_hover }}" data-stop-on-interaction="{{ s.stop_on_interaction }}" data-loop="{{ s.loop }}" data-swipe-threshold="{{ s.swipe_threshold }}" data-label-slide="{{ 'sections.custom_slider.slide_label' | t: current: '[current]', total: total | escape }}" data-label-counter="{{ 'sections.custom_slider.counter' | t: current: '[current]', total: total | escape }}" data-label-play="{{ 'sections.custom_slider.play' | t | escape }}" data-label-pause="{{ 'sections.custom_slider.pause' | t | escape }}" data-arrows-pos="{{ s.arrow_position }}" data-arrows-hide-m="{{ s.arrow_hide_mobile }}" data-nav-pos="{{ s.nav_position }}" data-mobile-nav="{{ s.mobile_nav }}" data-dot-style="{{ s.dot_style }}" {% if s.content_animation != 'none' %} data-anim="{{ s.content_animation }}" {% endif %} >
+      <custom-slider class="cs-slider" role="region" aria-roledescription="{{ 'sections.custom_slider.carousel_roledescription' | t | escape }}" aria-label="{{ 'sections.custom_slider.carousel_label' | t | escape }}" data-transition="{{ s.transition }}" data-autoplay="{{ s.autoplay }}" data-speed="{{ s.autoplay_speed }}" data-pause-hover="{{ s.pause_on_hover }}" data-stop-on-interaction="{{ s.stop_on_interaction }}" data-loop="{{ s.loop }}" data-swipe-threshold="{{ s.swipe_threshold }}" data-label-slide="{{ 'sections.custom_slider.slide_label' | t: current: '[current]', total: total | escape }}" data-label-counter="{{ 'sections.custom_slider.counter' | t: current: '[current]', total: total | escape }}" data-label-play="{{ 'sections.custom_slider.play' | t | escape }}" data-label-pause="{{ 'sections.custom_slider.pause' | t | escape }}" data-arrows-pos="{{ s.arrow_position }}" data-arrows-hide-m="{{ s.arrow_hide_mobile }}" data-nav-pos="{{ s.nav_position }}" data-mobile-nav="{{ s.mobile_nav }}" data-dot-style="{{ s.dot_style }}" {% if s.content_animation != 'none' %} data-anim="{{ s.content_animation }}" {% endif %} >
         {%- if total > 1 -%}
           {%- if s.autoplay or s.show_dots or s.show_counter -%}
             <div class="cs-nav">
@@ -123,8 +128,6 @@
                   assign b = block.settings
                   assign img_d = b.image
                   assign img_m = b.image_mobile | default: img_d
-                  assign link_fallback = 'sections.custom_slider.slide_link' | t: number: forloop.index
-                  assign box_alpha = b.content_bg_opacity | divided_by: 100.0
                   assign has_text = false
                   assign heading_plain = ''
                   if b.show_text
@@ -134,21 +137,39 @@
                     endif
                   endif
                   assign alt = img_d.alt | default: heading_plain
-                  assign link_label = alt | default: link_fallback
                   assign button_count = b.button_count | plus: 0
-                  assign has_buttons = false
-                  if button_count > 0
-                    for n in (1..button_count)
-                      assign key_label = 'button_' | append: n | append: '_label'
-                      assign key_link = 'button_' | append: n | append: '_link'
-                      if b[key_label] != blank and b[key_link] != blank
-                        assign has_buttons = true
-                      endif
-                    endfor
-                  endif
                   assign use_slide_link = false
                   if button_count == 0 and b.slide_link != blank
                     assign use_slide_link = true
+                    assign link_fallback = 'sections.custom_slider.slide_link' | t: number: forloop.index
+                    assign link_label = alt | default: link_fallback
+                  endif
+                -%}
+                {%- capture buttons_html -%}
+                  {%- if button_count > 0 -%}
+                    {%- for n in (1..button_count) -%}
+                      {%- liquid
+                        assign key_label = 'button_' | append: n | append: '_label'
+                        assign key_link = 'button_' | append: n | append: '_link'
+                        assign key_style = 'button_' | append: n | append: '_style'
+                        assign key_tab = 'button_' | append: n | append: '_new_tab'
+                      -%}
+                      {%- if b[key_label] != blank and b[key_link] != blank -%}
+                        <a class="cs-btn cs-btn--{{ b[key_style] }}" href="{{ b[key_link] }}"
+                          {% if b[key_tab] %}target="_blank" rel="noopener"{% endif %}>
+                            {{- b[key_label] | escape -}}
+                          {%- if b[key_tab] -%}
+                            <span class="cs-visually-hidden"> {{ 'sections.custom_slider.new_tab' | t }}</span>
+                          {%- endif -%}
+                        </a>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
+                {%- endcapture -%}
+                {%- liquid
+                  assign has_buttons = false
+                  if buttons_html != blank
+                    assign has_buttons = true
                   endif
                   assign has_content = false
                   if has_text or has_buttons
@@ -157,16 +178,19 @@
                   assign boxed = false
                   if has_text and b.show_content_bg
                     assign boxed = true
+                    assign box_alpha = b.content_bg_opacity | divided_by: 100.0
                   endif
                   assign heading_tag = 'h2'
-                  if forloop.first
-                    assign heading_tag = s.first_heading_tag
-                  endif
                   assign loading = 'lazy'
                   assign priority = 'auto'
                   if forloop.first
-                    assign loading = 'eager'
-                    assign priority = 'high'
+                    assign heading_tag = s.first_heading_tag
+                    if section.index == 1 or section.index == nil
+                      assign loading = 'eager'
+                      assign priority = 'high'
+                    elsif section.index == 2
+                      assign loading = 'eager'
+                    endif
                   endif
                   assign pos_d = b.position_desktop | split: '-'
                   assign v_d = pos_d.first | replace: 'top', 'flex-start' | replace: 'middle', 'center' | replace: 'bottom', 'flex-end'
@@ -194,7 +218,7 @@
                   {%- endif %}
                   {%- if boxed %} --cs-box-bg: {{ b.content_bg | color_modify: 'alpha', box_alpha }};{% endif %}
                 {%- endcapture -%}
-                <div class="cs-slide {% if forloop.first %} is-active{% endif %} {% if use_slide_link %} cs-slide--linked{% endif %}" role="group" aria-roledescription="{{ 'sections.custom_slider.slide_roledescription' | t | escape }}" aria-label="{{ 'sections.custom_slider.slide_label' | t: current: forloop.index, total: total | escape }}" tabindex="-1" data-cs-slide style="{{ slide_style | strip_newlines | strip }}" {{ block.shopify_attributes }} >
+                <div class="cs-slide{% if forloop.first %} is-active{% endif %}{% if use_slide_link %} cs-slide--linked{% endif %}" role="group" aria-roledescription="{{ slide_role }}" aria-label="{{ 'sections.custom_slider.slide_label' | t: current: forloop.index, total: total | escape }}" tabindex="-1" data-cs-slide style="{{ slide_style | strip_newlines | strip }}" {{ block.shopify_attributes }} >
                   {%- if use_slide_link -%}
                     <a class="cs-media" href="{{ b.slide_link }}" aria-label="{{ link_label | escape }}">
                   {%- else -%}
@@ -245,25 +269,7 @@
                           {%- endif -%}
                         {%- endif -%}
                         {%- if has_buttons -%}
-                          <div class="cs-buttons" style="--i: {{ i }}">
-                            {%- for n in (1..button_count) -%}
-                              {%- liquid
-                                assign key_label = 'button_' | append: n | append: '_label'
-                                assign key_link = 'button_' | append: n | append: '_link'
-                                assign key_style = 'button_' | append: n | append: '_style'
-                                assign key_tab = 'button_' | append: n | append: '_new_tab'
-                              -%}
-                              {%- if b[key_label] != blank and b[key_link] != blank -%}
-                                <a class="cs-btn cs-btn--{{ b[key_style] }}" href="{{ b[key_link] }}"
-                                  {% if b[key_tab] %}target="_blank" rel="noopener"{% endif %}>
-                                    {{- b[key_label] | escape -}}
-                                  {%- if b[key_tab] -%}
-                                    <span class="cs-visually-hidden"> {{ 'sections.custom_slider.new_tab' | t }}</span>
-                                  {%- endif -%}
-                                </a>
-                              {%- endif -%}
-                            {%- endfor -%}
-                          </div>
+                          <div class="cs-buttons" style="--i: {{ i }}">{{ buttons_html }}</div>
                         {%- endif -%}
                       </div>
                     </div>
